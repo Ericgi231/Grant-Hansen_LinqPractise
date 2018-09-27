@@ -32,19 +32,32 @@ namespace Demo_LINQ_ClassOfProducts
             // Write the following methods
             //
 
+            // Connor
             // OrderByUnits(): List the names and units of all products with less than 10 units in stock. Order by units.
 
+            // Eric
             // OrderByPrice(): List all products with a unit price less than $10. Order by price.
 
+            // Connor
             // FindExpensive(): List the most expensive Seafood. Consider there may be more than one.
 
+            // Eric
             // OrderByTotalValue(): List all condiments with total value in stock (UnitPrice * UnitsInStock). Sort by total value.
-
+            
+            // Eric or Connor
             // OrderByName(): List all products with names that start with "S" and calculate the average of the units in stock.
 
+            // Eric and Connor
             // Query: Student Choice - Minimum of one per team member
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private static void OrderByPrice()
+        {
+
+        }
 
         /// <summary>
         /// read all products from an XML file and return as a list of Product
