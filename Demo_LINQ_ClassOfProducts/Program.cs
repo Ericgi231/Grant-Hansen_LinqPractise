@@ -37,6 +37,7 @@ namespace Demo_LINQ_ClassOfProducts
 
             // Eric
             // OrderByPrice(): List all products with a unit price less than $10. Order by price.
+            OrderByPrice(productList);
 
             // Connor
             // FindExpensive(): List the most expensive Seafood. Consider there may be more than one.
@@ -52,11 +53,25 @@ namespace Demo_LINQ_ClassOfProducts
         }
 
         /// <summary>
-        /// 
+        /// Eric
+        /// Filter out data over $10 and order data by price
         /// </summary>
-        private static void OrderByPrice()
+        private static void OrderByPrice(List<Product> products)
         {
+            Console.Clear();
+            Console.WriteLine("Order drinks under $10 by price.\n");
 
+            var sortedProducts = products.Where(i => i.UnitPrice < 10).OrderBy(i => i.UnitPrice).Select( i => new { name = i.ProductName, price = i.UnitPrice});
+
+            foreach (var product in sortedProducts)
+            {
+                Console.Write(product.name + ": ");
+                Console.WriteLine(product.price);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
         }
 
         /// <summary>
