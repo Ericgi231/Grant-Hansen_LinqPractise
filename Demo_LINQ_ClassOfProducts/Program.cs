@@ -34,6 +34,7 @@ namespace Demo_LINQ_ClassOfProducts
 
             // Connor
             // OrderByUnits(): List the names and units of all products with less than 10 units in stock. Order by units.
+            OrderByUnits(productList);
 
             // Eric
             // OrderByPrice(): List all products with a unit price less than $10. Order by price.
@@ -43,7 +44,7 @@ namespace Demo_LINQ_ClassOfProducts
 
             // Eric
             // OrderByTotalValue(): List all condiments with total value in stock (UnitPrice * UnitsInStock). Sort by total value.
-            
+
             // Eric or Connor
             // OrderByName(): List all products with names that start with "S" and calculate the average of the units in stock.
 
@@ -58,6 +59,60 @@ namespace Demo_LINQ_ClassOfProducts
         {
 
         }
+
+        /// <summary>
+        /// List the names and units of all products with less than 10 units in stock. Order by units.
+        /// </summary>
+        private static void OrderByUnits(List<Product> products)
+        {
+            string TAB = "   ";
+
+            Console.Clear();
+            Console.WriteLine(TAB + "List the names and units of all products with less than 10 units in stock. Order by units.");
+            Console.WriteLine();
+
+            //
+            // query syntax
+            //
+            var sortedProducts =
+                from product in products
+                where product.UnitsInStock < 10
+                orderby product.UnitsInStock descending
+                select new
+                {
+                    unitsInStock = product.UnitsInStock,
+                    Name = product.ProductName
+                };
+
+            //
+            // lambda syntax
+            //
+            //var sortedProducts = products.Where(p => p.Category == "Beverages" && p.UnitPrice > 15).OrderByDescending(p => p.UnitPrice).Select(p => new
+            //{
+            //    Name = p.ProductName,
+            //    Price = p.UnitPrice
+            //});
+
+
+            decimal average = products.Average(p => p.UnitPrice);
+
+            Console.WriteLine(TAB + "Product Name".PadRight(20) + "Units In Stock".PadLeft(15));
+            Console.WriteLine(TAB + "------------".PadRight(20) + "-------------".PadLeft(15));
+
+            foreach (var product in sortedProducts)
+
+            {
+                Console.WriteLine(TAB + product.Name.PadRight(20) + product.unitsInStock.ToString().PadLeft(15));
+            }
+
+            //Console.WriteLine();
+            //Console.WriteLine(TAB + "Average Price:".PadRight(20) + average.ToString("C2").PadLeft(15));
+
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Press any key to continue.");
+            Console.ReadKey();
+        }
+
 
         /// <summary>
         /// read all products from an XML file and return as a list of Product
