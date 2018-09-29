@@ -45,12 +45,101 @@ namespace Demo_LINQ_ClassOfProducts
 
             // Eric
             // OrderByTotalValue(): List all condiments with total value in stock (UnitPrice * UnitsInStock). Sort by total value.
+            OrderByTotalValue(productList);
 
-            // Eric or Connor
+            // Eric
             // OrderByName(): List all products with names that start with "S" and calculate the average of the units in stock.
+            OrderByName(productList);
 
-            // Eric and Connor
             // Query: Student Choice - Minimum of one per team member
+            //Eric
+            SumCategory(productList);
+            //Connor add method here
+
+        }
+
+
+        /// <summary>
+        /// Eric
+        /// Total stock in each category
+        /// </summary>
+        private static void SumCategory(List<Product> products)
+        {
+            string TAB = "   ";
+
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Total stock per category.\n");
+            Console.WriteLine(TAB + "Category".PadRight(15) + "Stock".PadLeft(10));
+            Console.WriteLine(TAB + "--------".PadRight(15) + "-----".PadLeft(10));
+
+            var sortedProducts = products.GroupBy(i => i.Category).Select(n => new { category = n.Key, stock = n.Sum(s => s.UnitsInStock)});
+            var total = sortedProducts.Sum(i => i.stock);
+            foreach (var product in sortedProducts)
+            {
+                Console.WriteLine(TAB + product.category.PadRight(15) + product.stock.ToString().PadLeft(10));
+            }
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Total".PadRight(15) + total.ToString().PadLeft(10));
+
+
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Press any key to continue.");
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Eric
+        /// List All producuts that start with S and calculate the average
+        /// </summary>
+        private static void OrderByName(List<Product> products)
+        {
+            string TAB = "   ";
+
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Products that start with S.\n");
+            Console.WriteLine(TAB + "Product Name".PadRight(30) + "Units In Stock".PadLeft(15));
+            Console.WriteLine(TAB + "------------".PadRight(30) + "-------------".PadLeft(15));
+
+            var sortedProducts = products.Where(i => i.ProductName.Substring(0,1).ToLower() == "s").Select(i => new { name = i.ProductName, stock = i.UnitsInStock }).OrderBy(i => i.name);
+            var average = sortedProducts.Average(i => i.stock);
+            foreach (var product in sortedProducts)
+            {
+                Console.WriteLine(TAB + product.name.PadRight(30) + product.stock.ToString().PadLeft(15));
+            }
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Average".PadRight(30) + average.ToString("0.00").PadLeft(15));
+
+
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Press any key to continue.");
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Eric
+        /// Lists the total value of each condiments stock
+        /// </summary>
+        private static void OrderByTotalValue(List<Product> products)
+        {
+            string TAB = "   ";
+
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Total worth of condiment stock.\n");
+            Console.WriteLine(TAB + "Product Name".PadRight(35) + "Stock".PadRight(8) + "Price".PadRight(8) + "Stock Worth");
+            Console.WriteLine(TAB + "------------".PadRight(35) + "-----".PadRight(8) + "-----".PadRight(8) + "-----------");
+
+            var sortedProducts = products.Where(i => i.Category == "Condiments").Select(i => new { name = i.ProductName, price = i.UnitPrice, stock = i.UnitsInStock }).OrderBy(i => i.price * i.stock);
+            foreach (var product in sortedProducts)
+            {
+                Console.WriteLine(TAB + product.name.PadRight(35) + product.stock.ToString("0").PadRight(8) + "$" + product.price.ToString("0.00").PadRight(7) + "$" + (product.price * product.stock).ToString("0.00"));
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Press any key to continue.");
+            Console.ReadKey();
         }
 
         /// <summary>
@@ -59,19 +148,22 @@ namespace Demo_LINQ_ClassOfProducts
         /// </summary>
         private static void OrderByPrice(List<Product> products)
         {
+            string TAB = "   ";
+
             Console.Clear();
-            Console.WriteLine("Order drinks under $10 by price.\n");
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Drinks under $10. Sorted by price.\n");
+            Console.WriteLine(TAB + "Product Name".PadRight(35) + "Unit Price");
+            Console.WriteLine(TAB + "------------".PadRight(35) + "----------");
 
             var sortedProducts = products.Where(i => i.UnitPrice < 10).OrderBy(i => i.UnitPrice).Select( i => new { name = i.ProductName, price = i.UnitPrice});
-
             foreach (var product in sortedProducts)
             {
-                Console.Write(product.name + ": ");
-                Console.WriteLine(product.price);
+                Console.WriteLine(TAB + product.name.PadRight(35) + "$" + product.price.ToString("0.00"));
             }
 
             Console.WriteLine();
-            Console.WriteLine("Press any key to continue.");
+            Console.WriteLine(TAB + "Press any key to continue.");
             Console.ReadKey();
         }
 
