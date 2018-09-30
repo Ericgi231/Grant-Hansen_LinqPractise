@@ -24,6 +24,7 @@ namespace Demo_LINQ_ClassOfProducts
 
             List<Product> productList = ReadAllProductsFromXml();
 
+
             OrderByCatagory(productList);
 
             OrderByCatagoryAnoymous(productList);
@@ -42,6 +43,7 @@ namespace Demo_LINQ_ClassOfProducts
 
             // Connor
             // FindExpensive(): List the most expensive Seafood. Consider there may be more than one.
+            FindExpensive(productList);
 
             // Eric
             // OrderByTotalValue(): List all condiments with total value in stock (UnitPrice * UnitsInStock). Sort by total value.
@@ -54,9 +56,61 @@ namespace Demo_LINQ_ClassOfProducts
             // Query: Student Choice - Minimum of one per team member
             //Eric
             SumCategory(productList);
-            //Connor add method here
+            //Connor - Query and display the most expensive product from each category of product list
+            expensiveEachCategory(productList);
 
         }
+
+
+        /// <summary>
+        /// Connor
+        /// Find most expensive product in each category of list
+        /// </summary>
+        private static void expensiveEachCategory(List<Product> products)
+        {
+            string TAB = "   ";
+
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Most expensive product per category.\n");
+            Console.WriteLine(TAB + "Product Category".PadRight(17) + "Product Name".PadLeft(15) + "Product Price".PadLeft(31)); // TODO: Display price as well???
+            Console.WriteLine(TAB + "--------".PadRight(17) + "-----".PadLeft(8) + "-----".PadLeft(30));
+
+            // Select all products
+            var allProducts = products.Select(i => new { category = i.Category, name = i.ProductName, price = i.UnitPrice }).OrderByDescending(i => i.price);
+
+            // Instantiate array to hold categories
+            List<string> productCategories = new List<string>();
+
+            // Iterate through all products and store new categories to array
+            foreach (var product in allProducts)
+            {
+                productCategories.Add(product.category);
+            }
+
+            // Remove duplicate entries 
+            productCategories = productCategories.Distinct().ToList();
+
+            // For each category in list, set a default maxPrice value then iterate through all products and compare to maxPrice
+            foreach (var category in productCategories)
+            {
+                // Set default for maxPrice
+                decimal maxPrice = 0;
+                foreach (var product in allProducts)
+                {
+                    if ( (product.price >= maxPrice) && (product.category == category) )
+                    {
+                        maxPrice = product.price;
+                        Console.WriteLine(TAB + category.PadRight(20) + product.name.PadRight(30) + product.price.ToString());
+                    }
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Press any key to continue.");
+            Console.ReadKey();
+        }
+
 
 
         /// <summary>
@@ -166,6 +220,43 @@ namespace Demo_LINQ_ClassOfProducts
             Console.WriteLine(TAB + "Press any key to continue.");
             Console.ReadKey();
         }
+
+        /// <summary>
+        /// Connor
+        /// Display the most expensive seafood item in the list
+        /// </summary>
+        private static void FindExpensive(List<Product> products)
+        {
+            string TAB = "   ";
+
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Most expensive seafood\n");
+            Console.WriteLine(TAB + "Product Name".PadRight(35) + "Unit Price");
+            Console.WriteLine(TAB + "------------".PadRight(35) + "----------");
+
+            // Pull all items in seafood category and sort by descending price
+            var allSeafood = products.Where(i => i.Category == "Seafood").OrderByDescending(i => i.UnitPrice).Select(i => new { name = i.ProductName, price = i.UnitPrice });
+
+            // Run check to display all if price is the same
+            decimal highestPrice = 0;
+            foreach (var product in allSeafood)
+            {
+                // Store the highest price
+                if (product.price >= highestPrice)
+                {
+                    highestPrice = product.price;
+                    Console.WriteLine(TAB + product.name.PadRight(35) + "$" + product.price.ToString("0.00"));
+                } else { break; }  // The results are already sorted in ascending order so if the next item is not >= highestPrice, we can break
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(TAB + "Press any key to continue.");
+            Console.ReadKey();
+        }
+
+
+
 
         /// <summary>
         /// List the names and units of all products with less than 10 units in stock. Order by units.
